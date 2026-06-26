@@ -1,0 +1,238 @@
+<UserControl x:Class="Oblivion.GUI.UI.AnalysisWidgets.OverviewTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="24,16">
+        <StackPanel Style="{StaticResource FadeInOnLoad}">
+            <!-- PE Header Information -->
+            <TextBlock Text="PE HEADER" FontSize="13" FontWeight="Bold"
+                       FontFamily="{StaticResource OblivionMonoFont}"
+                       Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+            <Border Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="16" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Machine -->
+                    <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,12">
+                        <TextBlock Text="Machine" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding Machine}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- Architecture -->
+                    <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,12">
+                        <TextBlock Text="Architecture" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding Architecture}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionAccent}"/>
+                    </StackPanel>
+
+                    <!-- TimeDateStamp -->
+                    <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,12">
+                        <TextBlock Text="TimeDateStamp" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding TimeDateStamp}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- Characteristics -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,12">
+                        <TextBlock Text="Characteristics" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding Characteristics}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- Subsystem -->
+                    <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,0,0,12">
+                        <TextBlock Text="Subsystem" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding Subsystem}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- DllCharacteristics -->
+                    <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,12">
+                        <TextBlock Text="DllCharacteristics" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding DllCharacteristics}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- ImageBase -->
+                    <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,12">
+                        <TextBlock Text="ImageBase" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding ImageBase}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionAccent}"/>
+                    </StackPanel>
+
+                    <!-- Entry Point -->
+                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,12">
+                        <TextBlock Text="Entry Point" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding EntryPoint}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionAccent}"/>
+                    </StackPanel>
+
+                    <!-- File Size -->
+                    <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,0,12">
+                        <TextBlock Text="File Size" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding FileSize}" FontSize="13"
+                                   Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <!-- Hash -->
+                    <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,0,0,12">
+                        <TextBlock Text="SHA256" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding Hash}" FontSize="11"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
+                    <!-- File Path -->
+                    <StackPanel Grid.Row="5" Grid.ColumnSpan="2" Margin="0,0,0,0">
+                        <TextBlock Text="File Path" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}"/>
+                        <TextBlock Text="{Binding FilePath}" FontSize="12"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Sections Summary -->
+            <TextBlock Text="SECTIONS SUMMARY" FontSize="13" FontWeight="Bold"
+                       FontFamily="{StaticResource OblivionMonoFont}"
+                       Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+            <Border Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="16" Margin="0,0,0,20">
+                <ItemsControl ItemsSource="{Binding Sections}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,0,0,8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                           FontFamily="{StaticResource OblivionMonoFont}" FontSize="12"
+                                           FontWeight="SemiBold"
+                                           Foreground="{DynamicResource OblivionAccent}"/>
+
+                                <TextBlock Grid.Column="1" FontSize="11"
+                                           Foreground="{DynamicResource OblivionTextSecondary}">
+                                    <Run Text="VA: 0x"/><Run Text="{Binding VirtualAddress, StringFormat=X}"/>
+                                    <Run Text="  Raw: "/><Run Text="{Binding RawDataSize}"/>
+                                    <Run Text=" bytes"/>
+                                </TextBlock>
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                    <TextBlock Text="R" FontSize="10" FontWeight="Bold" Margin="4,0"
+                                               Foreground="{DynamicResource OblivionGreen}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsReadable}" Value="False">
+                                                        <Setter Property="Opacity" Value="0.2"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="W" FontSize="10" FontWeight="Bold" Margin="4,0"
+                                               Foreground="{DynamicResource OblivionRed}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsWritable}" Value="False">
+                                                        <Setter Property="Opacity" Value="0.2"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    <TextBlock Text="X" FontSize="10" FontWeight="Bold" Margin="4,0"
+                                               Foreground="{DynamicResource OblivionAccent}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsExecutable}" Value="False">
+                                                        <Setter Property="Opacity" Value="0.2"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+
+            <!-- Imports Summary -->
+            <TextBlock Text="IMPORTED LIBRARIES" FontSize="13" FontWeight="Bold"
+                       FontFamily="{StaticResource OblivionMonoFont}"
+                       Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+            <Border Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="16">
+                <ItemsControl ItemsSource="{Binding ImportEntries}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                <ui:SymbolIcon Symbol="Library24" FontSize="13"
+                                               Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding ModuleName}" FontSize="12"
+                                           FontFamily="{StaticResource OblivionMonoFont}"
+                                           Foreground="{DynamicResource OblivionAccent}"/>
+                                <TextBlock FontSize="11" Margin="8,0,0,0"
+                                           Foreground="{DynamicResource OblivionTextMuted}">
+                                    <Run Text="("/>
+                                    <Run Text="{Binding Functions.Count, Mode=OneWay}"/>
+                                    <Run Text=" functions)"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

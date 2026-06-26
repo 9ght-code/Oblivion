@@ -1,0 +1,46 @@
+<Application x:Class="Oblivion.GUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Oblivion.GUI"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+                <ResourceDictionary Source="/UI/Resources/Converters.xaml"/>
+                <ResourceDictionary Source="/UI/Resources/Styles.xaml"/>
+                <ResourceDictionary Source="/UI/Resources/Animations.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Cyberpunk Neon Palette -->
+            <SolidColorBrush x:Key="OblivionBg" Color="#0a0e17"/>
+            <SolidColorBrush x:Key="OblivionSidebar" Color="#060a12"/>
+            <SolidColorBrush x:Key="OblivionCard" Color="#111827"/>
+            <SolidColorBrush x:Key="OblivionBorder" Color="#1e293b"/>
+            <SolidColorBrush x:Key="OblivionText" Color="#e2e8f0"/>
+            <SolidColorBrush x:Key="OblivionTextSecondary" Color="#94a3b8"/>
+            <SolidColorBrush x:Key="OblivionTextMuted" Color="#475569"/>
+            <SolidColorBrush x:Key="OblivionAccent" Color="#00f0ff"/>
+            <SolidColorBrush x:Key="OblivionGreen" Color="#00ff88"/>
+            <SolidColorBrush x:Key="OblivionRed" Color="#ff2d55"/>
+            <SolidColorBrush x:Key="OblivionOrange" Color="#ff9500"/>
+            <SolidColorBrush x:Key="OblivionTeal" Color="#00ff88"/>
+
+            <!-- Derived status badge backgrounds -->
+            <SolidColorBrush x:Key="OblivionGreenBg" Color="#0a1f15"/>
+            <SolidColorBrush x:Key="OblivionGreenBorder" Color="#00ff88"/>
+            <SolidColorBrush x:Key="OblivionOrangeBg" Color="#1f1600"/>
+            <SolidColorBrush x:Key="OblivionRedBg" Color="#1f0a10"/>
+            <SolidColorBrush x:Key="OblivionTealBg" Color="#0a1f15"/>
+
+            <!-- Glow & effects -->
+            <SolidColorBrush x:Key="OblivionGlow" Color="#00f0ff"/>
+            <SolidColorBrush x:Key="OblivionGlowDim" Color="#1a00f0ff"/>
+            <SolidColorBrush x:Key="OblivionCardHover" Color="#152033"/>
+            <SolidColorBrush x:Key="OblivionSurface" Color="#0f1520"/>
+            <SolidColorBrush x:Key="OblivionAccentSecondary" Color="#bf00ff"/>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

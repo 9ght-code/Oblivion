@@ -1,0 +1,117 @@
+<UserControl x:Class="Oblivion.GUI.UI.AnalysisWidgets.StringsTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d">
+
+    <Grid Margin="24,16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,12">
+            <TextBlock Text="EXTRACTED STRINGS" FontSize="13" FontWeight="Bold"
+                   FontFamily="{StaticResource OblivionMonoFont}"
+                       Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,12,0"
+                       VerticalAlignment="Center"/>
+            <TextBlock FontSize="12" Foreground="{DynamicResource OblivionTextMuted}"
+                       VerticalAlignment="Center">
+                <Run Text="("/>
+                <Run Text="{Binding ExtractedStrings.Count, Mode=OneWay}"/>
+                <Run Text=" strings found, min length 4)"/>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- Search placeholder -->
+        <Border Grid.Row="1" Background="{DynamicResource OblivionCard}"
+                BorderBrush="{DynamicResource OblivionBorder}"
+                BorderThickness="1" CornerRadius="6" Padding="8,4" Margin="0,0,0,12">
+            <StackPanel Orientation="Horizontal">
+                <ui:SymbolIcon Symbol="Search24" FontSize="14"
+                               Foreground="{DynamicResource OblivionTextMuted}" Margin="4,0,8,0"/>
+                <ui:TextBox x:Name="StringSearchBox" PlaceholderText="Search strings..."
+                            Background="Transparent" BorderThickness="0"
+                            Foreground="{DynamicResource OblivionText}" FontSize="12"
+                            Width="300" TextChanged="StringSearchBox_TextChanged"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Strings DataGrid -->
+        <Border Grid.Row="2" Background="{DynamicResource OblivionBg}"
+                BorderBrush="{DynamicResource OblivionBorder}"
+                BorderThickness="1" CornerRadius="6" ClipToBounds="True">
+
+            <ui:DataGrid x:Name="StringsGrid"
+                         ItemsSource="{Binding ExtractedStrings}"
+                         Background="Transparent" BorderThickness="0"
+                         AutoGenerateColumns="False" HeadersVisibility="Column"
+                         GridLinesVisibility="Horizontal"
+                         RowBackground="Transparent"
+                         AlternatingRowBackground="{DynamicResource OblivionCard}"
+                         Foreground="{DynamicResource OblivionText}"
+                         IsReadOnly="True">
+
+                <ui:DataGrid.ColumnHeaderStyle>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="{DynamicResource OblivionCard}"/>
+                        <Setter Property="Foreground" Value="{DynamicResource OblivionTextSecondary}"/>
+                        <Setter Property="Padding" Value="12,8"/>
+                        <Setter Property="FontSize" Value="12"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource OblivionBorder}"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                    </Style>
+                </ui:DataGrid.ColumnHeaderStyle>
+
+                <ui:DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="12,4"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Foreground" Value="{DynamicResource OblivionText}"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border Padding="{TemplateBinding Padding}"
+                                            Background="{TemplateBinding Background}">
+                                        <ContentPresenter VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ui:DataGrid.CellStyle>
+
+                <ui:DataGrid.Columns>
+                    <DataGridTextColumn Header="Offset" Binding="{Binding Offset}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Cascadia Code, Consolas"/>
+                                <Setter Property="Foreground" Value="{DynamicResource OblivionTextSecondary}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="String" Binding="{Binding Value}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontFamily" Value="Cascadia Code, Consolas"/>
+                                <Setter Property="Foreground" Value="{DynamicResource OblivionText}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Length" Binding="{Binding Length}" Width="80"/>
+                    <DataGridTextColumn Header="Encoding" Binding="{Binding Encoding}" Width="80">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{DynamicResource OblivionTextMuted}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </ui:DataGrid.Columns>
+            </ui:DataGrid>
+        </Border>
+    </Grid>
+</UserControl>

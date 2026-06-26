@@ -1,0 +1,18 @@
+#pragma once
+
+typedef enum
+{
+    PE_OK = 0,
+
+    PE_ERR_FILE_NOT_FOUND,
+    PE_ERR_READ_FAILED,
+    PE_ERR_OUT_OF_MEMORY,
+
+    PE_ERR_INVALID_MZ,
+    PE_ERR_INVALID_PE,
+    PE_ERR_UNSUPPORTED_ARCH,
+
+    PE_ERR_OUT_OF_RANGE,
+    PE_ERR_INVALID_SECTION
+
+} PE_Error;

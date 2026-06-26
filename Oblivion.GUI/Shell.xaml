@@ -1,0 +1,326 @@
+<ui:FluentWindow x:Class="Oblivion.GUI.Shell"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Oblivion.GUI.MVVM.ViewModel"
+        xmlns:view="clr-namespace:Oblivion.GUI.MVVM.View"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        xmlns:widgets="clr-namespace:Oblivion.GUI.Widgets"
+        xmlns:ext="clr-namespace:Oblivion.GUI.Domain.Extensions"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="None"
+        mc:Ignorable="d"
+        Height="720" Width="1280">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding InitializePageCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Background="{DynamicResource OblivionBg}"
+          AllowDrop="True"
+          DragOver="Grid_DragOver"
+          Drop="Grid_Drop">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- TitleBar -->
+        <ui:TitleBar ShowMaximize="True" ShowMinimize="True" Grid.Row="0" Panel.ZIndex="99">
+            <ui:TitleBar.Header>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,0">
+                    <Border Width="3" Height="14" CornerRadius="2"
+                            Background="{DynamicResource OblivionAccent}" Margin="0,0,10,0"/>
+                    <TextBlock Text="OBLIVION" FontSize="12" FontWeight="Bold"
+                               FontFamily="{StaticResource OblivionMonoFont}"
+                               Foreground="{DynamicResource OblivionAccent}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock FontSize="11" Foreground="{DynamicResource OblivionTextMuted}"
+                               VerticalAlignment="Center" Margin="12,0,0,0">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="PE Analyzer"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAnalysisActive}" Value="True">
+                                        <Setter Property="Text" Value="{Binding CurrentAnalysis.FileName, StringFormat='Analyzing — {0}'}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+
+        <!-- Main layout: sidebar + content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260" MinWidth="48" MaxWidth="400"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- SIDEBAR -->
+            <Grid Grid.Column="0" Background="{DynamicResource OblivionSidebar}">
+                <!-- Neon accent strip on left edge -->
+                <Border Width="2" HorizontalAlignment="Left" VerticalAlignment="Stretch"
+                        Background="{DynamicResource OblivionAccent}" Opacity="0.3"/>
+
+                <Grid Margin="2,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Explorer Header -->
+                    <widgets:ExplorerHeader DataContext="{Binding}" Padding="0,4,0,0"/>
+
+                    <!-- Inline action panels -->
+                    <StackPanel Grid.Row="1" Margin="12,0,12,0">
+
+                        <!-- Rename Folder panel -->
+                        <Border Margin="0,6,0,0" Background="{DynamicResource OblivionCard}"
+                                CornerRadius="6" Padding="10,8"
+                                BorderBrush="{DynamicResource OblivionAccent}" BorderThickness="1,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRenamingFolder}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock Text="RENAME FOLDER" FontSize="10" FontWeight="SemiBold"
+                                           FontFamily="{StaticResource OblivionMonoFont}"
+                                           Foreground="{DynamicResource OblivionAccent}" Margin="0,0,0,6"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBox Text="{Binding RenameFolderText, UpdateSourceTrigger=PropertyChanged}"
+                                                PlaceholderText="New name" FontSize="12" Margin="0,0,4,0"/>
+                                    <ui:Button Grid.Column="1" Content="Save" Appearance="Primary"
+                                               Command="{Binding ConfirmRenameFolderCommand}"
+                                               FontSize="12" Padding="10,4" Margin="0,0,2,0">
+                                        <i:Interaction.Behaviors>
+                                            <ext:ButtonScaleBehavior/>
+                                        </i:Interaction.Behaviors>
+                                    </ui:Button>
+                                    <ui:Button Grid.Column="2" Appearance="Transparent"
+                                               Command="{Binding CancelRenameFolderCommand}"
+                                               Padding="6,4" ToolTip="Cancel">
+                                        <ui:SymbolIcon Symbol="Dismiss24" FontSize="14"
+                                                       Foreground="{DynamicResource OblivionTextSecondary}"/>
+                                    </ui:Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Rename File panel -->
+                        <Border Margin="0,6,0,0" Background="{DynamicResource OblivionCard}"
+                                CornerRadius="6" Padding="10,8"
+                                BorderBrush="{DynamicResource OblivionAccent}" BorderThickness="1,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRenamingFile}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock Text="RENAME FILE" FontSize="10" FontWeight="SemiBold"
+                                           FontFamily="{StaticResource OblivionMonoFont}"
+                                           Foreground="{DynamicResource OblivionAccent}" Margin="0,0,0,6"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBox Text="{Binding RenameFileText, UpdateSourceTrigger=PropertyChanged}"
+                                                PlaceholderText="New name" FontSize="12" Margin="0,0,4,0"/>
+                                    <ui:Button Grid.Column="1" Content="Save" Appearance="Primary"
+                                               Command="{Binding ConfirmRenameFileCommand}"
+                                               FontSize="12" Padding="10,4" Margin="0,0,2,0">
+                                        <i:Interaction.Behaviors>
+                                            <ext:ButtonScaleBehavior/>
+                                        </i:Interaction.Behaviors>
+                                    </ui:Button>
+                                    <ui:Button Grid.Column="2" Appearance="Transparent"
+                                               Command="{Binding CancelRenameFileCommand}"
+                                               Padding="6,4" ToolTip="Cancel">
+                                        <ui:SymbolIcon Symbol="Dismiss24" FontSize="14"
+                                                       Foreground="{DynamicResource OblivionTextSecondary}"/>
+                                    </ui:Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Move File panel -->
+                        <Border Margin="0,6,0,0" Background="{DynamicResource OblivionCard}"
+                                CornerRadius="6" Padding="10,8"
+                                BorderBrush="{DynamicResource OblivionAccentSecondary}" BorderThickness="1,0,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMovingFile}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <StackPanel>
+                                <TextBlock FontSize="10" FontWeight="SemiBold"
+                                           FontFamily="{StaticResource OblivionMonoFont}"
+                                           Foreground="{DynamicResource OblivionAccentSecondary}" Margin="0,0,0,6">
+                                    <Run Text="MOVE"/>
+                                    <Run Text="{Binding MovingFile.Name, Mode=OneWay}" Foreground="{DynamicResource OblivionAccent}"/>
+                                    <Run Text="TO"/>
+                                </TextBlock>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ComboBox ItemsSource="{Binding Workspaces}"
+                                              SelectedItem="{Binding MovingFileTargetWorkspace}"
+                                              DisplayMemberPath="Name"
+                                              FontSize="12" Margin="0,0,4,0"/>
+                                    <ui:Button Grid.Column="1" Content="Move" Appearance="Primary"
+                                               Command="{Binding ConfirmMoveFileCommand}"
+                                               FontSize="12" Padding="10,4" Margin="0,0,2,0">
+                                        <i:Interaction.Behaviors>
+                                            <ext:ButtonScaleBehavior/>
+                                        </i:Interaction.Behaviors>
+                                    </ui:Button>
+                                    <ui:Button Grid.Column="2" Appearance="Transparent"
+                                               Command="{Binding CancelMoveFileCommand}"
+                                               Padding="6,4" ToolTip="Cancel">
+                                        <ui:SymbolIcon Symbol="Dismiss24" FontSize="14"
+                                                       Foreground="{DynamicResource OblivionTextSecondary}"/>
+                                    </ui:Button>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- File Tree -->
+                    <widgets:FileTree Grid.Row="2" DataContext="{Binding}" Padding="2,0"/>
+
+                    <!-- Import progress overlay -->
+                    <Grid Grid.Row="2">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsImporting}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Border Background="{DynamicResource OblivionSidebar}" Opacity="0.9"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+                            <ui:ProgressRing IsIndeterminate="True" Width="28" Height="28"
+                                             Foreground="{DynamicResource OblivionAccent}">
+                                <ui:ProgressRing.Effect>
+                                    <DropShadowEffect Color="#00f0ff" BlurRadius="15"
+                                                      ShadowDepth="0" Opacity="0.4"/>
+                                </ui:ProgressRing.Effect>
+                            </ui:ProgressRing>
+                            <TextBlock Text="ANALYZING..." Margin="0,10,0,0"
+                                       FontSize="10" FontFamily="{StaticResource OblivionMonoFont}"
+                                       Foreground="{DynamicResource OblivionAccent}"
+                                      
+                                       HorizontalAlignment="Center"
+                                       Style="{StaticResource PulsingGlow}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Sidebar toggle button -->
+                    <Border Grid.Row="3" Padding="12,8">
+                        <Border.BorderBrush>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="{Binding Color, Source={StaticResource OblivionAccent}}" Offset="0"/>
+                                <GradientStop Color="{Binding Color, Source={StaticResource OblivionBorder}}" Offset="0.3"/>
+                                <GradientStop Color="Transparent" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Border.BorderBrush>
+                        <Border.BorderThickness>
+                            <Thickness Top="1"/>
+                        </Border.BorderThickness>
+                        <ui:Button Command="{Binding ToggleSidebarCommand}" ToolTip="Toggle Sidebar"
+                                   Appearance="Transparent" Padding="4" HorizontalAlignment="Left">
+                            <ui:SymbolIcon Symbol="PanelLeft24" FontSize="16"
+                                           Foreground="{DynamicResource OblivionTextMuted}"/>
+                        </ui:Button>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!-- SPLITTER -->
+            <GridSplitter Grid.Column="1" Width="1" Background="{DynamicResource OblivionBorder}"
+                          HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+
+            <!-- CONTENT AREA -->
+            <Grid Grid.Column="2">
+
+                <!-- Home view (file details) — visible when not analyzing -->
+                <Grid>
+                    <i:Interaction.Behaviors>
+                        <ext:FadeOnVisibilityBehavior/>
+                    </i:Interaction.Behaviors>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAnalysisActive}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <view:StartupView DataContext="{Binding}"/>
+                </Grid>
+
+                <!-- Analysis view — visible when analyzing -->
+                <Grid>
+                    <i:Interaction.Behaviors>
+                        <ext:FadeOnVisibilityBehavior/>
+                    </i:Interaction.Behaviors>
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsAnalysisActive}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    <view:AnalysisView DataContext="{Binding CurrentAnalysis}"/>
+                </Grid>
+            </Grid>
+        </Grid>
+
+        <!-- Snackbar -->
+        <ui:SnackbarPresenter Grid.Row="1" VerticalAlignment="Bottom" x:Name="SnackBarPres" Panel.ZIndex="100"/>
+    </Grid>
+</ui:FluentWindow>

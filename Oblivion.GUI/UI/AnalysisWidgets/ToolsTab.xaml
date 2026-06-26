@@ -1,0 +1,225 @@
+<UserControl x:Class="Oblivion.GUI.UI.AnalysisWidgets.ToolsTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24,16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: RVA / RAW / VA Converter -->
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="ADDRESS CONVERTER" FontSize="13" FontWeight="Bold"
+                   FontFamily="{StaticResource OblivionMonoFont}"
+                           Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+                <!-- Input -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Input Address" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="Enter a hex address (e.g. 0x1000, 0x400, 0x140001000):" FontSize="11"
+                                   Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,8"/>
+
+                        <ui:TextBox Text="{Binding ConverterInput, UpdateSourceTrigger=PropertyChanged}"
+                                    PlaceholderText="0x1000" FontSize="13"
+                                    FontFamily="{StaticResource OblivionMonoFont}"
+                                    Background="{DynamicResource OblivionBg}"
+                                    Foreground="{DynamicResource OblivionText}"
+                                    BorderBrush="{DynamicResource OblivionBorder}"
+                                    Margin="0,0,0,12"/>
+
+                        <!-- Conversion Buttons -->
+                        <WrapPanel Orientation="Horizontal">
+                            <ui:Button Content="RVA → RAW" Appearance="Primary"
+                                       Padding="16,6" FontSize="12" Margin="0,0,8,8"
+                                       Command="{Binding ConvertRvaToRawCommand}"/>
+                            <ui:Button Content="RAW → RVA"
+                                       Padding="16,6" FontSize="12" Margin="0,0,8,8"
+                                       Command="{Binding ConvertRawToRvaCommand}"/>
+                            <ui:Button Content="VA → RVA"
+                                       Padding="16,6" FontSize="12" Margin="0,0,8,8"
+                                       Command="{Binding ConvertVaToRvaCommand}"/>
+                            <ui:Button Content="View in Hex"
+                                       Padding="16,6" FontSize="12" Margin="0,0,0,8"
+                                       Command="{Binding GoToConverterResultInHexCommand}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Result -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Result" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="{Binding ConverterResult}" FontSize="13"
+                                   FontFamily="{StaticResource OblivionMonoFont}"
+                                   Foreground="{DynamicResource OblivionTextMuted}"
+                                   TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Section: " FontSize="11"
+                                       Foreground="{DynamicResource OblivionTextMuted}"/>
+                            <Border Background="{DynamicResource OblivionBg}" CornerRadius="4"
+                                    Padding="8,2">
+                                <TextBlock Text="{Binding ConverterSection}" FontSize="11"
+                                           FontFamily="{StaticResource OblivionMonoFont}"
+                                           Foreground="{DynamicResource OblivionAccent}"/>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Quick Reference -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16">
+                    <StackPanel>
+                        <TextBlock Text="Quick Reference" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <TextBlock FontSize="11" Foreground="{DynamicResource OblivionTextMuted}"
+                                   TextWrapping="Wrap" LineHeight="18">
+                            <Run FontWeight="SemiBold" Foreground="{DynamicResource OblivionText}">RVA</Run>
+                            <Run> — Relative Virtual Address. Offset from ImageBase in memory.</Run>
+                            <LineBreak/>
+                            <Run FontWeight="SemiBold" Foreground="{DynamicResource OblivionText}">RAW</Run>
+                            <Run> — File offset. Physical position in the PE file on disk.</Run>
+                            <LineBreak/>
+                            <Run FontWeight="SemiBold" Foreground="{DynamicResource OblivionText}">VA</Run>
+                            <Run> — Virtual Address. Absolute address in memory (ImageBase + RVA).</Run>
+                            <LineBreak/><LineBreak/>
+                            <Run FontWeight="SemiBold">Formula:</Run>
+                            <Run> VA = ImageBase + RVA</Run>
+                            <LineBreak/>
+                            <Run FontWeight="SemiBold">Formula:</Run>
+                            <Run> RAW = RVA - Section.VA + Section.RawPtr</Run>
+                        </TextBlock>
+
+                        <TextBlock FontSize="11" Foreground="{DynamicResource OblivionAccent}" Margin="0,8,0,0"
+                                   FontFamily="{StaticResource OblivionMonoFont}">
+                            <Run Text="ImageBase: "/><Run Text="{Binding ImageBase, Mode=OneWay}"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+
+            <!-- Right: C to Shellcode -->
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="C → SHELLCODE COMPILER" FontSize="13" FontWeight="Bold"
+                   FontFamily="{StaticResource OblivionMonoFont}"
+                           Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+                <!-- Compiler Selection -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Compiler" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <ComboBox ItemsSource="{Binding AvailableCompilers}"
+                                      SelectedItem="{Binding SelectedCompiler}"
+                                      Width="320" FontSize="12"
+                                      Background="{DynamicResource OblivionBg}"
+                                      Foreground="{DynamicResource OblivionText}"
+                                      BorderBrush="{DynamicResource OblivionBorder}"/>
+
+                            <ui:Button Content="Refresh" Padding="12,4" FontSize="12" Margin="8,0,0,0"
+                                       Command="{Binding DetectCompilersCommand}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="64-bit output" IsChecked="{Binding CCompileIs64}"
+                                      Foreground="{DynamicResource OblivionText}" FontSize="12"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- C Source Code -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="C Source Code" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <TextBlock Text="Write position-independent C code. No standard library — resolve WinAPI via PEB/GetProcAddress manually."
+                                   FontSize="11" Foreground="{DynamicResource OblivionTextMuted}"
+                                   TextWrapping="Wrap" Margin="0,0,0,8"/>
+
+                        <ui:TextBox Text="{Binding CSourceCode, UpdateSourceTrigger=PropertyChanged}"
+                                    FontSize="12" MinHeight="200"
+                                    FontFamily="{StaticResource OblivionMonoFont}"
+                                    Background="{DynamicResource OblivionBg}"
+                                    Foreground="{DynamicResource OblivionText}"
+                                    BorderBrush="{DynamicResource OblivionBorder}"
+                                    AcceptsReturn="True"
+                                    AcceptsTab="True"
+                                    TextWrapping="Wrap"
+                                    Margin="0,0,0,12"/>
+
+                        <WrapPanel Orientation="Horizontal">
+                            <ui:Button Content="Compile to Shellcode" Appearance="Primary"
+                                       Padding="20,8" FontSize="12" Margin="0,0,8,0"
+                                       Command="{Binding CompileCToShellcodeCommand}"/>
+                            <ui:Button Content="Send to Injector" Padding="16,8" FontSize="12"
+                                       Command="{Binding CopyShellcodeToInjectorCommand}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Output -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="Compiler Output" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding CCompileOutput}" FontSize="11"
+                                       FontFamily="{StaticResource OblivionMonoFont}"
+                                       Foreground="{DynamicResource OblivionTextMuted}"
+                                       TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+
+                <!-- Shellcode Hex Output -->
+                <Border Background="{DynamicResource OblivionCard}"
+                        BorderBrush="{DynamicResource OblivionBorder}"
+                        BorderThickness="1" CornerRadius="6" Padding="20,16">
+                    <StackPanel>
+                        <TextBlock Text="Shellcode Bytes" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                        <ScrollViewer MaxHeight="200" VerticalScrollBarVisibility="Auto">
+                            <ui:TextBox Text="{Binding CCompiledHex, Mode=OneWay}"
+                                        IsReadOnly="True" FontSize="11" MinHeight="60"
+                                        FontFamily="{StaticResource OblivionMonoFont}"
+                                        Background="{DynamicResource OblivionBg}"
+                                        Foreground="{DynamicResource OblivionGreen}"
+                                        BorderBrush="{DynamicResource OblivionBorder}"
+                                        TextWrapping="Wrap"/>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

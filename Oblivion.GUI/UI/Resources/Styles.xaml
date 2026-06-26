@@ -1,0 +1,10 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <FontFamily x:Key="OblivionMonoFont">Cascadia Code, Consolas</FontFamily>
+
+    <CornerRadius x:Key="OblivionCornerSmall">4</CornerRadius>
+    <CornerRadius x:Key="OblivionCornerMedium">8</CornerRadius>
+    <CornerRadius x:Key="OblivionCornerLarge">12</CornerRadius>
+
+</ResourceDictionary>

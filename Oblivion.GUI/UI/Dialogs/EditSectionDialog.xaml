@@ -1,0 +1,59 @@
+<Window x:Class="Oblivion.GUI.UI.Dialogs.EditSectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        Title="Edit Section Characteristics" Height="280" Width="400"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanResize"
+        MinHeight="280" MinWidth="400"
+        Background="{DynamicResource OblivionBg}">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" FontSize="13" FontWeight="Bold"
+                   FontFamily="{StaticResource OblivionMonoFont}"
+                   Foreground="{DynamicResource OblivionAccent}" Margin="0,0,0,8">
+            <Run Text="EDIT SECTION: "/>
+            <Run x:Name="SectionNameRun" Foreground="{DynamicResource OblivionAccent}"/>
+        </TextBlock>
+
+        <TextBlock Grid.Row="1" FontSize="12"
+                   Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,16">
+            <Run Text="Current: 0x"/>
+            <Run x:Name="CurrentCharsRun"/>
+        </TextBlock>
+
+        <!-- Characteristics -->
+        <StackPanel Grid.Row="2" Margin="0,0,0,16">
+            <TextBlock Text="Characteristics:" FontSize="12"
+                       Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+            <WrapPanel Orientation="Horizontal">
+                <CheckBox x:Name="ChkRead" Content="Read" Margin="0,0,16,0"
+                          Foreground="{DynamicResource OblivionText}"/>
+                <CheckBox x:Name="ChkWrite" Content="Write" Margin="0,0,16,0"
+                          Foreground="{DynamicResource OblivionText}"/>
+                <CheckBox x:Name="ChkExecute" Content="Execute" Margin="0,0,16,0"
+                          Foreground="{DynamicResource OblivionText}"/>
+                <CheckBox x:Name="ChkCode" Content="Code" Margin="0,0,16,0"
+                          Foreground="{DynamicResource OblivionText}"/>
+                <CheckBox x:Name="ChkInitData" Content="Initialized Data" Margin="0,0,16,0"
+                          Foreground="{DynamicResource OblivionText}"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <ui:Button Content="Cancel" Margin="0,0,8,0" Padding="20,6"
+                       Click="OnCancel"/>
+            <ui:Button Content="Apply" Appearance="Primary" Padding="20,6"
+                       Click="OnConfirm"/>
+        </StackPanel>
+    </Grid>
+</Window>

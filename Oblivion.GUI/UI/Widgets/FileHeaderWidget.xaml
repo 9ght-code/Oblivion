@@ -1,0 +1,189 @@
+<UserControl x:Class="Oblivion.GUI.Widgets.FileHeaderWidget"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:Oblivion.GUI.Widgets"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <Border Margin="0,0,0,20" Style="{StaticResource CyberpunkCardAnimated}"
+            Padding="16,14">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- File Icon with glow -->
+            <Border Grid.Column="0"
+                    Width="50" Height="50"
+                    Background="{DynamicResource OblivionSurface}"
+                    BorderBrush="{DynamicResource OblivionAccent}"
+                    BorderThickness="1" CornerRadius="8">
+                <ui:SymbolIcon Symbol="Document24" FontSize="24"
+                               Foreground="{DynamicResource OblivionAccent}"
+                               HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ui:SymbolIcon.Effect>
+                        <DropShadowEffect Color="#00f0ff" BlurRadius="10"
+                                          ShadowDepth="0" Opacity="0.3"/>
+                    </ui:SymbolIcon.Effect>
+                </ui:SymbolIcon>
+            </Border>
+
+            <!-- File Name -->
+            <StackPanel Grid.Column="1" Margin="15,2,0,0" VerticalAlignment="Center">
+                <TextBlock Text="{Binding SelectedFile.Name, FallbackValue='application.exe'}"
+                           FontSize="20" FontWeight="Bold"
+                           FontFamily="{StaticResource OblivionMonoFont}"
+                           Foreground="{DynamicResource OblivionText}"/>
+            </StackPanel>
+
+            <!-- Export PDF Button -->
+            <ui:Button Grid.Column="2" VerticalAlignment="Center" Margin="8,0"
+                       Command="{Binding ExportPdfCommand}"
+                       Appearance="Secondary" Padding="10,6" Cursor="Hand"
+                       ToolTip="Export PDF">
+                <ui:Button.Style>
+                    <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
+                        <Setter Property="Visibility" Value="Visible"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedFile}" Value="{x:Null}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:Button.Style>
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Symbol="Save24" FontSize="14" Margin="0,0,6,0"/>
+                    <TextBlock Text="Export PDF" FontSize="11" FontWeight="SemiBold"/>
+                </StackPanel>
+            </ui:Button>
+
+            <!-- Integrity Status -->
+            <Grid Grid.Column="3" VerticalAlignment="Top" HorizontalAlignment="Right">
+
+                <!-- 1. Integrity Verified: not deleted AND not modified -->
+                <Border Background="{DynamicResource OblivionGreenBg}" BorderBrush="{DynamicResource OblivionGreenBorder}" BorderThickness="1"
+                        CornerRadius="6" Padding="12,6">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedFile.IsDeleted}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedFile.IsHashChanged}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedFile}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="16"
+                                       Foreground="{DynamicResource OblivionGreen}" Margin="0,0,8,0">
+                            <ui:SymbolIcon.Effect>
+                                <DropShadowEffect Color="#00ff88" BlurRadius="8"
+                                                  ShadowDepth="0" Opacity="0.4"/>
+                            </ui:SymbolIcon.Effect>
+                        </ui:SymbolIcon>
+                        <StackPanel>
+                            <TextBlock Text="Integrity Verified"
+                                       Foreground="{DynamicResource OblivionGreen}"
+                                       FontSize="11" FontWeight="SemiBold"
+                                       FontFamily="{StaticResource OblivionMonoFont}"/>
+                            <TextBlock Text="Hash matches disk"
+                                       Foreground="{DynamicResource OblivionTextMuted}" FontSize="9"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 2. File Modified: hash changed AND not deleted -->
+                <Border Background="{DynamicResource OblivionOrangeBg}" BorderBrush="{DynamicResource OblivionOrange}"
+                        BorderThickness="1" CornerRadius="6" Padding="12,6">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedFile.IsHashChanged}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedFile.IsDeleted}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="Warning24" FontSize="16"
+                                       Foreground="{DynamicResource OblivionOrange}" Margin="0,0,8,0">
+                            <ui:SymbolIcon.Effect>
+                                <DropShadowEffect Color="#ff9500" BlurRadius="8"
+                                                  ShadowDepth="0" Opacity="0.4"/>
+                            </ui:SymbolIcon.Effect>
+                        </ui:SymbolIcon>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="File Modified!"
+                                       Foreground="{DynamicResource OblivionOrange}"
+                                       FontSize="11" FontWeight="Bold"
+                                       FontFamily="{StaticResource OblivionMonoFont}" Margin="0,0,0,4"/>
+                            <ui:Button Command="{Binding AnalyzeCommand}"
+                                       Appearance="Caution"
+                                       Padding="8,2" Cursor="Hand"
+                                       FontSize="10" FontWeight="SemiBold">
+                                <StackPanel Orientation="Horizontal">
+                                    <ui:SymbolIcon Symbol="ArrowSync24" FontSize="12" Margin="0,0,4,0"/>
+                                    <TextBlock Text="Re-Analyze"/>
+                                </StackPanel>
+                            </ui:Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 3. File Deleted: highest priority -->
+                <Border Background="{DynamicResource OblivionRedBg}" BorderBrush="{DynamicResource OblivionRed}"
+                        BorderThickness="1" CornerRadius="6" Padding="12,6">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedFile.IsDeleted}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
+
+                    <StackPanel Orientation="Horizontal">
+                        <ui:SymbolIcon Symbol="DismissCircle24" FontSize="16"
+                                       Foreground="{DynamicResource OblivionRed}" Margin="0,0,8,0">
+                            <ui:SymbolIcon.Effect>
+                                <DropShadowEffect Color="#ff2d55" BlurRadius="8"
+                                                  ShadowDepth="0" Opacity="0.4"/>
+                            </ui:SymbolIcon.Effect>
+                        </ui:SymbolIcon>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="File Deleted!"
+                                       Foreground="{DynamicResource OblivionRed}"
+                                       FontSize="11" FontWeight="Bold"
+                                       FontFamily="{StaticResource OblivionMonoFont}" Margin="0,0,0,4"/>
+                            <ui:Button Command="{Binding FixFileCommand}"
+                                       Appearance="Danger"
+                                       Padding="8,2" Cursor="Hand"
+                                       FontSize="10" FontWeight="SemiBold"
+                                       Content="Open"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

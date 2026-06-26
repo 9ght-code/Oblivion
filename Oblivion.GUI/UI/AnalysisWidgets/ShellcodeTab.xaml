@@ -1,0 +1,138 @@
+<UserControl x:Class="Oblivion.GUI.UI.AnalysisWidgets.ShellcodeTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             mc:Ignorable="d">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="24,16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Text="SHELLCODE INJECTOR" FontSize="13" FontWeight="Bold"
+                   FontFamily="{StaticResource OblivionMonoFont}"
+                       Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+            <!-- Shellcode Input -->
+            <Border Grid.Row="1" Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Shellcode Bytes" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                    <TextBlock Text="Enter hex bytes (space-separated) or load from a binary file:" FontSize="12"
+                               Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,8"/>
+
+                    <ui:TextBox Text="{Binding ShellcodeHex, UpdateSourceTrigger=PropertyChanged}"
+                                PlaceholderText="90 90 48 31 C0 C3"
+                                FontSize="12" MinHeight="80"
+                                FontFamily="{StaticResource OblivionMonoFont}"
+                                Background="{DynamicResource OblivionBg}"
+                                Foreground="{DynamicResource OblivionText}"
+                                BorderBrush="{DynamicResource OblivionBorder}"
+                                AcceptsReturn="True"
+                                TextWrapping="Wrap"
+                                Margin="0,0,0,8"/>
+
+                    <ui:Button Content="Load from file..." Padding="16,6" FontSize="12"
+                               Click="OnLoadFromFileClick"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Injection Options -->
+            <Border Grid.Row="2" Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Injection Method" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,12"/>
+
+                    <StackPanel Margin="0,0,0,12">
+                        <RadioButton x:Name="RbNewSection" Content="New section — creates a new PE section with shellcode"
+                                     IsChecked="True" Margin="0,0,0,8"
+                                     Foreground="{DynamicResource OblivionText}"
+                                     Checked="OnInjectionModeChanged"/>
+                        <RadioButton x:Name="RbCodeCave" Content="Code cave — find zero-byte padding in existing sections"
+                                     Margin="0,0,0,8"
+                                     Foreground="{DynamicResource OblivionText}"
+                                     Checked="OnInjectionModeChanged"/>
+                        <RadioButton x:Name="RbAppendLast" Content="Append to last section — extend the last section"
+                                     Margin="0,0,0,8"
+                                     Foreground="{DynamicResource OblivionText}"
+                                     Checked="OnInjectionModeChanged"/>
+                    </StackPanel>
+
+                    <!-- Section name (for new section) -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12"
+                                x:Name="SectionNamePanel">
+                        <TextBlock Text="Section name:" FontSize="12"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"
+                                   VerticalAlignment="Center" Margin="0,0,8,0"/>
+                        <ui:TextBox Text="{Binding ShellcodeSectionName, UpdateSourceTrigger=PropertyChanged}"
+                                    PlaceholderText=".obli" Width="120" FontSize="12"
+                                    FontFamily="{StaticResource OblivionMonoFont}"
+                                    Background="{DynamicResource OblivionBg}"
+                                    Foreground="{DynamicResource OblivionText}"/>
+                    </StackPanel>
+
+                    <CheckBox Content="Redirect entry point to shellcode (JMP back to original EP)"
+                              IsChecked="{Binding ShellcodeRedirectEp}"
+                              Foreground="{DynamicResource OblivionText}" FontSize="12"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Characteristics -->
+            <Border Grid.Row="3" Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="20,16" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="Section Characteristics" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource OblivionTextSecondary}" Margin="0,0,0,8"/>
+
+                    <TextBlock Text="Default: Read + Execute (appropriate for shellcode)"
+                               FontSize="11" Foreground="{DynamicResource OblivionTextMuted}" Margin="0,0,0,12"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                        <Border Background="{DynamicResource OblivionGreenBg}" CornerRadius="4"
+                                Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Read" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource OblivionGreen}"/>
+                        </Border>
+                        <Border Background="{DynamicResource OblivionBg}" CornerRadius="4"
+                                Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Execute" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource OblivionAccent}"/>
+                        </Border>
+                        <Border Background="{DynamicResource OblivionBg}" CornerRadius="4"
+                                Padding="8,4" Margin="0,0,8,0">
+                            <TextBlock Text="Code" FontSize="11" FontWeight="SemiBold"
+                                       Foreground="{DynamicResource OblivionTextSecondary}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <ui:Button Content="Inject Shellcode" Appearance="Caution"
+                               Padding="24,8" FontSize="13"
+                               Command="{Binding InjectShellcodeCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Status -->
+            <Border Grid.Row="4" Background="{DynamicResource OblivionCard}"
+                    BorderBrush="{DynamicResource OblivionBorder}"
+                    BorderThickness="1" CornerRadius="6" Padding="20,12">
+                <TextBlock Text="{Binding ShellcodeStatus}" FontSize="12"
+                           FontFamily="{StaticResource OblivionMonoFont}"
+                           Foreground="{DynamicResource OblivionTextMuted}"
+                           TextWrapping="Wrap"/>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

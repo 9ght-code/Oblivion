@@ -1,0 +1,155 @@
+<UserControl x:Class="Oblivion.GUI.Widgets.ExplorerHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:local="clr-namespace:Oblivion.GUI.Widgets"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <DockPanel Margin="12,10,12,0" LastChildFill="True">
+
+        <!-- Top row: logo + title + action buttons -->
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <ui:SymbolIcon Symbol="Shield24" FontSize="16"
+                               Foreground="{DynamicResource OblivionAccent}" Margin="0,0,8,0">
+                    <ui:SymbolIcon.Effect>
+                        <DropShadowEffect Color="{Binding Color, Source={StaticResource OblivionAccent}}"
+                                          BlurRadius="8" ShadowDepth="0" Opacity="0.5"/>
+                    </ui:SymbolIcon.Effect>
+                </ui:SymbolIcon>
+                <TextBlock Text="OBLIVION"
+                           Foreground="{DynamicResource OblivionAccent}"
+                           FontSize="12" FontWeight="Bold"
+                           FontFamily="{StaticResource OblivionMonoFont}"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <ui:Button Command="{Binding OpenFlyoutCommand}" ToolTip="New Folder"
+                           Appearance="Transparent" Padding="6" Margin="2,0">
+                    <ui:SymbolIcon Symbol="FolderAdd24" FontSize="16"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"/>
+                </ui:Button>
+
+                <ui:Button Command="{Binding CollapseAllCommand}" ToolTip="Collapse All"
+                           Appearance="Transparent" Padding="6" Margin="2,0">
+                    <ui:SymbolIcon Symbol="ChevronDown24" FontSize="16"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"/>
+                </ui:Button>
+
+                <ui:Button Command="{Binding OpenSettingsCommand}" ToolTip="Settings"
+                           Appearance="Transparent" Padding="6" Margin="2,0">
+                    <ui:SymbolIcon Symbol="Settings24" FontSize="16"
+                                   Foreground="{DynamicResource OblivionTextSecondary}"/>
+                </ui:Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Search bar with neon focus -->
+        <Border x:Name="SearchBorder" DockPanel.Dock="Top" Margin="0,10,0,0"
+                Background="{DynamicResource OblivionCard}"
+                BorderThickness="1"
+                CornerRadius="6" Padding="8,0">
+            <Border.BorderBrush>
+                <SolidColorBrush Color="#1e293b"/>
+            </Border.BorderBrush>
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#00f0ff" Duration="0:0:0.2"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.BorderBrush).(SolidColorBrush.Color)"
+                                                        To="#1e293b" Duration="0:0:0.3"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <ui:SymbolIcon Symbol="Search24" FontSize="14"
+                               Foreground="{DynamicResource OblivionTextMuted}"
+                               VerticalAlignment="Center" Margin="0,0,8,0"/>
+
+                <ui:TextBox Grid.Column="1"
+                            PlaceholderText="Search files..."
+                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            FontSize="12"
+                            Foreground="{DynamicResource OblivionText}"
+                            VerticalAlignment="Center"/>
+            </Grid>
+        </Border>
+
+        <!-- Inline create folder panel (visible when IsFlyoutOpen) -->
+        <Border DockPanel.Dock="Top" Margin="0,8,0,0">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsFlyoutOpen}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <ui:TextBox PlaceholderText="Folder name"
+                            Text="{Binding NewFolderName, UpdateSourceTrigger=PropertyChanged}"
+                            FontSize="12" Margin="0,0,6,0"/>
+
+                <ui:Button Grid.Column="1" Content="Create"
+                           Appearance="Primary"
+                           Command="{Binding CreateFolderCommand}"
+                           FontSize="12" Padding="12,5"/>
+            </Grid>
+        </Border>
+
+        <!-- Bottom separator with gradient accent -->
+        <Border DockPanel.Dock="Top" Margin="0,10,0,0" Height="1">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="{Binding Color, Source={StaticResource OblivionAccent}}" Offset="0"/>
+                    <GradientStop Color="{Binding Color, Source={StaticResource OblivionBorder}}" Offset="0.4"/>
+                    <GradientStop Color="Transparent" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!-- Filler to satisfy LastChildFill -->
+        <Border/>
+
+    </DockPanel>
+</UserControl>

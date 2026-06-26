@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="include\pe_types.h" />
+    <ClInclude Include="include\oblivion.h" />
+    <ClInclude Include="include\oblivion_errors.h" />
+    <ClInclude Include="include\pe_validator.h" />
+    <ClInclude Include="include\pe_manager.h" />
+    <ClInclude Include="include\pe_analyzer.h" />
+    <ClInclude Include="include\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\oblivion.c" />
+    <ClCompile Include="src\pe_manager.c" />
+    <ClCompile Include="src\pe_validator.c" />
+    <ClCompile Include="src\utils.c" />
+  </ItemGroup>
+</Project>

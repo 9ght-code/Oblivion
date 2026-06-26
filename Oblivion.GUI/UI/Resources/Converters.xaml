@@ -1,0 +1,15 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:Oblivion.GUI.Domain.Converters">
+
+    <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    <converters:BoolToPermissionBrushConverter x:Key="BoolToPermissionBrushConverter"/>
+    <converters:EntropyToBrushConverter x:Key="EntropyToBrushConverter"/>
+    <converters:EntropyToColorConverter x:Key="EntropyToColorConverter"/>
+    <converters:HealthStatusToBrushConverter x:Key="HealthStatusToBrushConverter"/>
+    <converters:InstructionCategoryToBrushConverter x:Key="CategoryToBrush"/>
+    <converters:SeverityToBrushConverter x:Key="SeverityToBrushConverter"/>
+    <converters:SeverityToBackgroundConverter x:Key="SeverityToBackgroundConverter"/>
+    <converters:SmartFileSizeConverter x:Key="SmartFileSizeConverter"/>
+
+</ResourceDictionary>
